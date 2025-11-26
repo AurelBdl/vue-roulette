@@ -1,0 +1,48 @@
+{
+  "name": "vue-roulette",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Composant Vue 3 de roue de casino réutilisable",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "main": "dist/casino-roulette.umd.cjs",
+  "module": "dist/casino-roulette.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/casino-roulette.js",
+      "require": "./dist/casino-roulette.umd.cjs"
+    },
+    "./CasinoRoulette.vue": "./src/components/CasinoRoulette.vue"
+  },
+  "files": [
+    "dist",
+    "src/components/CasinoRoulette.vue",
+    "src/index.ts"
+  ],
+  "keywords": [
+    "vue",
+    "roulette",
+    "component",
+    "casino"
+  ],
+  "author": "Casino Roulette Team",
+  "license": "MIT",
+  "dependencies": {},
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "vue": "^3.5.24",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "vue-tsc": "^3.1.4"
+  }
+}
