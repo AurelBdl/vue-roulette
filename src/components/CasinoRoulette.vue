@@ -170,7 +170,9 @@ const getIndexFromAngle = (value: number) => {
   }
   const normalized = normalizeAngle(value)
   const arc = segmentDegrees.value
-  const offset = (360 - normalized) % 360
+  const halfArc = arc / 2
+  const adjusted = (normalized - halfArc + 360) % 360
+  const offset = (360 - adjusted) % 360
   let index = Math.floor(offset / arc)
   if (index >= normalizedItems.value.length) {
     index = normalizedItems.value.length - 1
@@ -351,7 +353,8 @@ const angleForIndex = (index: number, spins: number, offsetRatio = 0.5) => {
   const arc = segmentDegrees.value
   const currentNormalized = normalizeAngle(angle.value)
   const boundedOffset = Math.min(Math.max(offsetRatio, 0.01), 0.99)
-  const targetNormalized = (360 - (index + boundedOffset) * arc) % 360
+  const halfArc = arc / 2
+  const targetNormalized = (360 - (index + boundedOffset) * arc + halfArc) % 360
   let delta = targetNormalized - currentNormalized
   if (delta <= 0) {
     delta += 360
@@ -395,7 +398,7 @@ const stop = () => {
   }
   targetItem.value = candidate
   animationState.value.startAngle = angle.value
-  animationState.value.endAngle = angleForIndex(index, 1)
+  animationState.value.endAngle = angleForIndex(index, 1, randomSegmentOffset())
   animationState.value.duration = Math.min(props.spinDuration / 2, 1000)
   animationState.value.startTime = 0
 }
