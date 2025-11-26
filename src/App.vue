@@ -1,16 +1,13 @@
 <template>
   <main class="app">
     <h1>Casino Roulette</h1>
-    <p>
-      Composant Vue 3 réutilisable pour afficher une roue façon casino.
-      Utilisez les boutons ci-dessous pour déclencher les méthodes exposées.
-    </p>
+    <p>Vue 3 reusable component to display a casino-style wheel. Use the buttons below to trigger the exposed methods.</p>
     <Example />
   </main>
 </template>
 
 <script setup lang="ts">
-import Example from './components/Example.vue'
+import Example from "./components/Example.vue";
 </script>
 
 <style scoped>
@@ -22,7 +19,7 @@ import Example from './components/Example.vue'
   justify-content: center;
   gap: 1.5rem;
   padding: 2rem;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   background: radial-gradient(circle at top, #1f2937, #0b101a);
   color: #eef2ff;
   text-align: center;
