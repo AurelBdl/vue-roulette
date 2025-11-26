@@ -36,6 +36,7 @@ const greenColor = '#27ae60'
 const redColor = '#c0392b'
 const blackColor = '#2c3e50'
 const fallbackPalette = ['#f39c12', '#8e44ad', '#16a085', '#d35400']
+const centerHoleRatio = 0.28
 
 const props = defineProps({
   items: {
@@ -245,6 +246,7 @@ const drawWheel = () => {
   }
   const dimension = props.size
   const radius = dimension / 2
+  const innerRadius = radius * centerHoleRatio
   context.clearRect(0, 0, dimension, dimension)
   context.save()
   context.translate(radius, radius)
@@ -255,6 +257,17 @@ const drawWheel = () => {
     context.arc(0, 0, radius - 8, 0, Math.PI * 2)
     context.strokeStyle = '#d6d6d6'
     context.lineWidth = 4
+    context.stroke()
+    context.save()
+    context.globalCompositeOperation = 'destination-out'
+    context.beginPath()
+    context.arc(0, 0, innerRadius, 0, Math.PI * 2)
+    context.fill()
+    context.restore()
+    context.beginPath()
+    context.arc(0, 0, innerRadius, 0, Math.PI * 2)
+    context.strokeStyle = 'rgba(255, 255, 255, 0.35)'
+    context.lineWidth = Math.max(2, radius * 0.012)
     context.stroke()
     context.restore()
     return
@@ -282,6 +295,19 @@ const drawWheel = () => {
     context.fillText(item.label, radius - 24, 6)
     context.restore()
   })
+
+  context.save()
+  context.globalCompositeOperation = 'destination-out'
+  context.beginPath()
+  context.arc(0, 0, innerRadius, 0, Math.PI * 2)
+  context.fill()
+  context.restore()
+
+  context.beginPath()
+  context.arc(0, 0, innerRadius, 0, Math.PI * 2)
+  context.strokeStyle = 'rgba(255, 255, 255, 0.35)'
+  context.lineWidth = Math.max(2, radius * 0.012)
+  context.stroke()
 
   context.restore()
 }
@@ -488,7 +514,7 @@ defineExpose({
   height: 100%;
   border-radius: 50%;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
-  background-color: #0f0f0f;
+  background-color: transparent;
 }
 
 .roulette-pointer {
