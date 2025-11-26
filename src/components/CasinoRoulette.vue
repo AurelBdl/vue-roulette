@@ -7,8 +7,13 @@
       :height="size"
       :aria-label="`Roulette avec ${normalizedItems.length} sections`"
     />
-    <div class="roulette-pointer">
-      <span />
+    <div
+      v-if="pointerVisible"
+      class="roulette-pointer"
+      :class="`pointer-${props.pointerPosition}`"
+      :style="pointerBaseStyle"
+    >
+      <div class="pointer-shape" />
     </div>
   </div>
 </template>
@@ -19,6 +24,13 @@ import type { PropType } from 'vue'
 import type { RouletteItem } from '../types'
 
 type NormalizedItem = Omit<RouletteItem, 'color'> & { color: string }
+
+type PointerOptions = {
+  visible?: boolean
+  color?: string
+  width?: number
+  length?: number
+}
 
 const greenColor = '#27ae60'
 const redColor = '#c0392b'
@@ -57,6 +69,14 @@ const props = defineProps({
   enableTickSound: {
     type: Boolean,
     default: false
+  },
+  pointerOptions: {
+    type: Object as PropType<PointerOptions>,
+    default: () => ({})
+  },
+  pointerPosition: {
+    type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
+    default: 'top'
   }
 })
 
@@ -81,6 +101,34 @@ const targetItem = ref<RouletteItem | null>(null)
 const lastIndex = ref<number | null>(null)
 const audioContext = ref<AudioContext | null>(null)
 const pendingStop = ref(false)
+const pointerConfig = computed(() => ({
+  visible: true,
+  color: '#ffffff',
+  width: 26,
+  length: 38,
+  ...(props.pointerOptions ?? {})
+}))
+const pointerVisible = computed(() => pointerConfig.value.visible !== false)
+const pointerBaseStyle = computed(() => {
+  const { width, length, color } = pointerConfig.value
+  const base: Record<string, string> = {
+    '--pointer-width': `${width}px`,
+    '--pointer-length': `${length}px`,
+    '--pointer-color': color ?? '#ffffff'
+  }
+  const offset = `${-(length / 2)}px`
+  switch (props.pointerPosition) {
+    case 'bottom':
+      return { ...base, bottom: offset, left: '50%', transform: 'translate(-50%, 0)' }
+    case 'left':
+      return { ...base, left: offset, top: '50%', transform: 'translate(0, -50%)' }
+    case 'right':
+      return { ...base, right: offset, top: '50%', transform: 'translate(0, -50%)' }
+    case 'top':
+    default:
+      return { ...base, top: offset, left: '50%', transform: 'translate(-50%, 0)' }
+  }
+})
 
 const normalizedItems = computed<NormalizedItem[]>(() => {
   const includeGreen = !props.useColor && props.items.length % 2 === 1
@@ -233,16 +281,6 @@ const drawWheel = () => {
     context.restore()
   })
 
-  context.beginPath()
-  context.arc(0, 0, radius * 0.6, 0, Math.PI * 2)
-  context.fillStyle = '#ffffff'
-  context.fill()
-
-  context.beginPath()
-  context.arc(0, 0, radius * 0.12, 0, Math.PI * 2)
-  context.fillStyle = '#202020'
-  context.fill()
-
   context.restore()
 }
 
@@ -298,13 +336,22 @@ const extraRotations = () => {
   return minimum + Math.floor(Math.random() * 3)
 }
 
-const angleForIndex = (index: number, spins: number) => {
+const randomSegmentOffset = () => {
+  if (normalizedItems.value.length <= 1) {
+    return 0.5
+  }
+  const safeMargin = 0.04
+  return safeMargin + Math.random() * (1 - safeMargin * 2)
+}
+
+const angleForIndex = (index: number, spins: number, offsetRatio = 0.5) => {
   if (!normalizedItems.value.length) {
     return angle.value
   }
   const arc = segmentDegrees.value
   const currentNormalized = normalizeAngle(angle.value)
-  const targetNormalized = (360 - (index + 0.5) * arc) % 360
+  const boundedOffset = Math.min(Math.max(offsetRatio, 0.01), 0.99)
+  const targetNormalized = (360 - (index + boundedOffset) * arc) % 360
   let delta = targetNormalized - currentNormalized
   if (delta <= 0) {
     delta += 360
@@ -325,7 +372,7 @@ const spin = () => {
   }
   targetItem.value = candidate
   animationState.value.startAngle = angle.value
-  animationState.value.endAngle = angleForIndex(targetIndex, extraRotations())
+  animationState.value.endAngle = angleForIndex(targetIndex, extraRotations(), randomSegmentOffset())
   animationState.value.duration = props.spinDuration
   animationState.value.startTime = 0
   spinning.value = true
@@ -443,23 +490,34 @@ defineExpose({
 
 .roulette-pointer {
   position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 14px solid transparent;
-  border-right: 14px solid transparent;
-  border-bottom: 24px solid #f5f5f5;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  width: var(--pointer-width);
+  height: var(--pointer-length);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
 }
 
-.roulette-pointer span {
-  position: absolute;
-  top: 18px;
-  left: -1px;
-  width: 2px;
-  height: 18px;
-  background: #333333;
+.pointer-shape {
+  width: var(--pointer-width);
+  height: var(--pointer-length);
+  background: var(--pointer-color);
+}
+
+.pointer-top .pointer-shape {
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+.pointer-bottom .pointer-shape {
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
+
+.pointer-left .pointer-shape {
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+.pointer-right .pointer-shape {
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 </style>
