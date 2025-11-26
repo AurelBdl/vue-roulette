@@ -12,19 +12,19 @@
       />
       <div class="actions">
         <button type="button" @click="spin" :disabled="spinning">
-          Lancer
+          Spin
         </button>
         <button type="button" @click="stop" :disabled="!spinning">
-          Freiner
+          Brake
         </button>
         <button type="button" @click="reset">
-          Réinitialiser
+          Reset
         </button>
       </div>
     </div>
     <div class="status">
       <p v-if="message">{{ message }}</p>
-      <p v-if="selection">Dernière sélection : <strong>{{ selection.label }}</strong></p>
+      <p v-if="selection">Last pick: <strong>{{ selection.label }}</strong></p>
     </div>
   </section>
 </template>
@@ -63,12 +63,12 @@ const reset = () => {
 
 const onSelect = (item: RouletteItem) => {
   selection.value = item
-  message.value = `Gagnant : ${item.label}`
+  message.value = `Winner: ${item.label}`
 }
 
 const onSpinStart = () => {
   spinning.value = true
-  message.value = 'La roue tourne...'
+  message.value = 'The wheel is spinning...'
 }
 
 const onSpinEnd = () => {
