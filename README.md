@@ -60,6 +60,9 @@ const spin = () => rouletteRef.value?.spin();
 | `enableTickSound` | `boolean`               | `false`              | Plays a click sound on every segment crossing.                       |
 | `pointerOptions`  | `PointerOptions`        | `{}`                 | Customization options for the pointer (see below).                   |
 | `pointerPosition` | `string`                | `'top'`              | Position of the pointer: `'top'`, `'right'`, `'bottom'`, or `'left'`.|
+| `centerHoleRatio` | `number`                | `0.28`               | Size ratio of the center hole relative to the wheel radius (0-1).    |
+| `spinOnClick`     | `boolean`               | `false`              | Enables spinning the wheel by clicking on it.                        |
+| `tickSoundVolume` | `number`                | `0.15`               | Volume of the tick sound (0-1). Only applies when `enableTickSound` is `true`. |
 
 ### `RouletteItem` interface
 
@@ -104,6 +107,8 @@ Reference the component via `ref`, then use `defineExpose`:
 
 - `useColor = true`: every item uses `item.color` (a built-in palette is used as a fallback when missing).
 - `useColor = false`: automatic red/black alternation. If the item count is odd, a green "0" slice is inserted at position 0 before applying the alternation.
+
+**Text color:** The label text color is automatically adjusted based on the background color luminance. Dark backgrounds display white text, while light backgrounds display black text for optimal readability.
 
 ## Local demo
 

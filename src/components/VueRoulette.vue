@@ -3,9 +3,11 @@
     <canvas
       ref="canvasRef"
       class="roulette-canvas"
+      :class="{ 'clickable': spinOnClick }"
       :width="size"
       :height="size"
       :aria-label="`Roulette avec ${normalizedItems.length} sections`"
+      @click="handleCanvasClick"
     />
     <div
       v-if="pointerVisible"
@@ -36,7 +38,6 @@ const greenColor = '#27ae60'
 const redColor = '#c0392b'
 const blackColor = '#2c3e50'
 const fallbackPalette = ['#f39c12', '#8e44ad', '#16a085', '#d35400']
-const centerHoleRatio = 0.28
 
 const props = defineProps({
   items: {
@@ -78,6 +79,18 @@ const props = defineProps({
   pointerPosition: {
     type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
     default: 'top'
+  },
+  centerHoleRatio: {
+    type: Number,
+    default: 0.28
+  },
+  spinOnClick: {
+    type: Boolean,
+    default: false
+  },
+  tickSoundVolume: {
+    type: Number,
+    default: 0.15
   }
 })
 
@@ -165,11 +178,28 @@ const normalizeAngle = (value: number) => {
   return normalized >= 0 ? normalized : normalized + 360
 }
 
+const getPointerAngleOffset = () => {
+  switch (props.pointerPosition) {
+    case 'right':
+      return -90
+    case 'bottom':
+      return 180
+    case 'left':
+      return 90
+    case 'top':
+    default:
+      return 0
+  }
+}
+
 const getIndexFromAngle = (value: number) => {
   if (!normalizedItems.value.length) {
     return null
   }
-  const normalized = normalizeAngle(value)
+  // Adjust angle based on pointer position
+  const pointerOffset = getPointerAngleOffset()
+  const adjustedValue = value + pointerOffset
+  const normalized = normalizeAngle(adjustedValue)
   const arc = segmentDegrees.value
   const halfArc = arc / 2
   const adjusted = (normalized - halfArc + 360) % 360
@@ -208,12 +238,13 @@ const playTick = () => {
   }
   const oscillator = ctx.createOscillator()
   const gain = ctx.createGain()
+  const volume = Math.max(0, Math.min(1, props.tickSoundVolume))
   oscillator.frequency.value = 1200
-  gain.gain.value = 0.15
+  gain.gain.value = volume
   oscillator.connect(gain)
   gain.connect(ctx.destination)
   const now = ctx.currentTime
-  gain.gain.setValueAtTime(0.15, now)
+  gain.gain.setValueAtTime(volume, now)
   gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02)
   oscillator.start(now)
   oscillator.stop(now + 0.02)
@@ -235,6 +266,26 @@ const emitAngleUpdate = () => {
   emit('update:angle', normalizeAngle(angle.value))
 }
 
+const getTextColor = (backgroundColor: string): string => {
+  // Convert hex to RGB
+  let color = backgroundColor.replace('#', '')
+  if (color.length === 3) {
+    color = color
+      .split('')
+      .map(c => c + c)
+      .join('')
+  }
+  const r = parseInt(color.substring(0, 2), 16)
+  const g = parseInt(color.substring(2, 4), 16)
+  const b = parseInt(color.substring(4, 6), 16)
+  
+  // Calculate relative luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  
+  // Return white for dark colors, black for light colors
+  return luminance > 0.5 ? '#000000' : '#ffffff'
+}
+
 const drawWheel = () => {
   const canvas = canvasRef.value
   if (!canvas) {
@@ -246,7 +297,7 @@ const drawWheel = () => {
   }
   const dimension = props.size
   const radius = dimension / 2
-  const innerRadius = radius * centerHoleRatio
+  const innerRadius = radius * props.centerHoleRatio
   context.clearRect(0, 0, dimension, dimension)
   context.save()
   context.translate(radius, radius)
@@ -288,7 +339,7 @@ const drawWheel = () => {
     context.fill()
 
     context.save()
-    context.fillStyle = '#ffffff'
+    context.fillStyle = getTextColor(item.color)
     context.rotate((start + end) / 2)
     context.textAlign = 'right'
     context.font = `${Math.max(14, radius * 0.08)}px sans-serif`
@@ -446,10 +497,30 @@ const reset = () => {
   lastIndex.value = getIndexFromAngle(angle.value)
 }
 
+const handleCanvasClick = () => {
+  if (props.spinOnClick) {
+    spin()
+  }
+}
+
 watch(
   () => props.size,
   () => {
     nextTick(drawWheel)
+  }
+)
+
+watch(
+  () => props.centerHoleRatio,
+  () => {
+    nextTick(drawWheel)
+  }
+)
+
+watch(
+  () => props.pointerPosition,
+  () => {
+    lastIndex.value = getIndexFromAngle(angle.value)
   }
 )
 
@@ -515,6 +586,10 @@ defineExpose({
   border-radius: 50%;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
   background-color: transparent;
+}
+
+.roulette-canvas.clickable {
+  cursor: pointer;
 }
 
 .roulette-pointer {
