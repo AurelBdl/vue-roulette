@@ -3,8 +3,15 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  base: "/vue-roulette/",
   plugins: [vue()],
+  server: {
+		port: 3000,
+		host: true,
+	},
+	preview: {
+		port: 3000,
+		host: true,
+	},
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
