@@ -153,22 +153,22 @@ const pointerBaseStyle = computed(() => {
 })
 
 const normalizedItems = computed<NormalizedItem[]>(() => {
-  const includeGreen = !props.useColor && props.items.length % 2 === 1
-  const baseItems: RouletteItem[] = includeGreen
-    ? [{ label: '0', value: '0', color: greenColor }, ...props.items]
-    : [...props.items]
+  const shouldGreenFirst = !props.useColor && props.items.length % 2 === 1
 
-  return baseItems.map((item, index) => {
+  return props.items.map((item, index) => {
     if (props.useColor) {
       const paletteIndex = fallbackPalette.length ? index % fallbackPalette.length : 0
       const fallbackColor = fallbackPalette[paletteIndex] ?? '#ffffff'
       const color: string = item.color ?? fallbackColor
       return { label: item.label, value: item.value, color } as NormalizedItem
     }
-    if (includeGreen && index === 0) {
+    // Si nombre impair et pas useColor, le premier élément est vert
+    if (shouldGreenFirst && index === 0) {
       return { label: item.label, value: item.value, color: greenColor } as NormalizedItem
     }
-    const offset = includeGreen ? index - 1 : index
+    // Pour les autres éléments, alterner rouge/noir
+    // Si premier est vert, on commence à 0 pour avoir rouge en index 1
+    const offset = shouldGreenFirst ? index - 1 : index
     const color: string = offset % 2 === 0 ? redColor : blackColor
     return { label: item.label, value: item.value, color } as NormalizedItem
   })
