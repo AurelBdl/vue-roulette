@@ -1,6 +1,6 @@
 <template>
   <main class="app">
-    <h1>Casino Roulette</h1>
+    <h1>Vue Roulette</h1>
     <p>Vue 3 reusable component to display a casino-style wheel. Use the buttons below to trigger the exposed methods.</p>
     <Example />
   </main>

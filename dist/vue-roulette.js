@@ -1,6 +1,6 @@
-import { defineComponent as oe, ref as f, computed as M, watch as z, nextTick as j, onMounted as re, onBeforeUnmount as se, createElementBlock as E, openBlock as G, normalizeStyle as U, createElementVNode as H, createCommentVNode as ie, normalizeClass as ue } from "vue";
+import { defineComponent as oe, ref as f, computed as M, watch as C, nextTick as j, onMounted as re, onBeforeUnmount as se, createElementBlock as E, openBlock as G, normalizeStyle as U, createElementVNode as H, createCommentVNode as ie, normalizeClass as ue } from "vue";
 const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve = "#2c3e50", de = 0.28, ge = /* @__PURE__ */ oe({
-  __name: "CasinoRoulette",
+  __name: "VueRoulette",
   props: {
     items: {
       type: Array,
@@ -45,12 +45,12 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
   },
   emits: ["spin-start", "spin-end", "select", "update:angle"],
   setup(c, { expose: S, emit: k }) {
-    const h = ["#f39c12", "#8e44ad", "#16a085", "#d35400"], a = c, C = k, F = f(null), r = f(a.initialAngle), m = f(!1), b = f(null), o = f({
+    const h = ["#f39c12", "#8e44ad", "#16a085", "#d35400"], a = c, I = k, F = f(null), r = f(a.initialAngle), m = f(!1), b = f(null), o = f({
       startAngle: a.initialAngle,
       endAngle: a.initialAngle,
       duration: a.spinDuration,
       startTime: 0
-    }), I = f(null), A = f(null), x = f(null), y = f(!1), N = M(() => ({
+    }), P = f(null), A = f(null), x = f(null), y = f(!1), N = M(() => ({
       visible: !0,
       color: "#ffffff",
       width: 26,
@@ -77,7 +77,7 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
       const t = !a.useColor && a.items.length % 2 === 1;
       return (t ? [{ label: "0", value: "0", color: J }, ...a.items] : [...a.items]).map((l, n) => {
         if (a.useColor) {
-          const u = h.length ? n % h.length : 0, T = h[u] ?? "#ffffff", d = l.color ?? T;
+          const u = h.length ? n % h.length : 0, z = h[u] ?? "#ffffff", d = l.color ?? z;
           return { label: l.label, value: l.value, color: d };
         }
         if (t && n === 0)
@@ -85,16 +85,16 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
         const v = (t ? n - 1 : n) % 2 === 0 ? fe : ve;
         return { label: l.label, value: l.value, color: v };
       });
-    }), D = M(() => s.value.length ? 360 / s.value.length : 0), w = (t) => {
+    }), V = M(() => s.value.length ? 360 / s.value.length : 0), w = (t) => {
       const e = t % 360;
       return e >= 0 ? e : e + 360;
     }, p = (t) => {
       if (!s.value.length)
         return null;
-      const e = w(t), l = D.value, n = l / 2, v = (360 - (e - n + 360) % 360) % 360;
+      const e = w(t), l = V.value, n = l / 2, v = (360 - (e - n + 360) % 360) % 360;
       let u = Math.floor(v / l);
       return u >= s.value.length && (u = s.value.length - 1), u;
-    }, V = () => {
+    }, D = () => {
       const t = p(r.value);
       return t === null ? null : s.value[t] ?? null;
     }, Q = () => {
@@ -113,7 +113,7 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
       const t = p(r.value);
       t !== null && A.value !== t && (A.value = t, Q());
     }, O = () => {
-      C("update:angle", w(r.value));
+      I("update:angle", w(r.value));
     }, g = () => {
       const t = F.value;
       if (!t)
@@ -128,23 +128,23 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
         e.beginPath(), e.arc(0, 0, n - 8, 0, Math.PI * 2), e.strokeStyle = "#d6d6d6", e.lineWidth = 4, e.stroke(), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.fill(), e.restore(), e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.strokeStyle = "rgba(255, 255, 255, 0.35)", e.lineWidth = Math.max(2, n * 0.012), e.stroke(), e.restore();
         return;
       }
-      const u = 2 * Math.PI / v, T = r.value * Math.PI / 180, d = -Math.PI / 2 - u / 2;
+      const u = 2 * Math.PI / v, z = r.value * Math.PI / 180, d = -Math.PI / 2 - u / 2;
       s.value.forEach((_, le) => {
-        const R = T + le * u + d, W = R + u;
+        const R = z + le * u + d, W = R + u;
         e.beginPath(), e.moveTo(0, 0), e.fillStyle = _.color, e.arc(0, 0, n - 4, R, W), e.closePath(), e.fill(), e.save(), e.fillStyle = "#ffffff", e.rotate((R + W) / 2), e.textAlign = "right", e.font = `${Math.max(14, n * 0.08)}px sans-serif`, e.fillText(_.label, n - 24, 6), e.restore();
       }), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.fill(), e.restore(), e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.strokeStyle = "rgba(255, 255, 255, 0.35)", e.lineWidth = Math.max(2, n * 0.012), e.stroke(), e.restore();
-    }, P = () => {
+    }, T = () => {
       b.value !== null && (cancelAnimationFrame(b.value), b.value = null);
     }, Y = () => {
-      P(), b.value = requestAnimationFrame(B);
+      T(), b.value = requestAnimationFrame(B);
     }, B = (t) => {
       o.value.startTime || (o.value.startTime = t);
       const e = t - o.value.startTime, l = o.value.duration || 1, n = Math.min(e / l, 1), i = a.easingFunction(n);
       r.value = o.value.startAngle + (o.value.endAngle - o.value.startAngle) * i, O(), X(), g(), n < 1 ? b.value = requestAnimationFrame(B) : Z();
     }, Z = () => {
-      P(), m.value = !1, y.value = !1, O(), g(), C("spin-end");
-      const t = V();
-      I.value = t, t && C("select", t);
+      T(), m.value = !1, y.value = !1, O(), g(), I("spin-end");
+      const t = D();
+      P.value = t, t && I("select", t);
     }, ee = () => {
       const t = Math.floor(a.initialVelocity * a.spinDuration / 36e4);
       return Math.max(3, t) + Math.floor(Math.random() * 3);
@@ -156,7 +156,7 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
     }, q = (t, e, l = 0.5) => {
       if (!s.value.length)
         return r.value;
-      const n = D.value, i = w(r.value), v = Math.min(Math.max(l, 0.01), 0.99), u = n / 2;
+      const n = V.value, i = w(r.value), v = Math.min(Math.max(l, 0.01), 0.99), u = n / 2;
       let d = (360 - (t + v) * n + u) % 360 - i;
       return d <= 0 && (d += 360), d += e * 360, r.value + d;
     }, te = () => {
@@ -164,7 +164,7 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
         return;
       y.value = !1;
       const t = Math.floor(Math.random() * s.value.length), e = s.value[t];
-      e && (I.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, ee(), $()), o.value.duration = a.spinDuration, o.value.startTime = 0, m.value = !0, C("spin-start"), Y());
+      e && (P.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, ee(), $()), o.value.duration = a.spinDuration, o.value.startTime = 0, m.value = !0, I("spin-start"), Y());
     }, ne = () => {
       if (!m.value || y.value)
         return;
@@ -173,43 +173,43 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
       if (t === null)
         return;
       const e = s.value[t];
-      e && (I.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, 1, $()), o.value.duration = Math.min(a.spinDuration / 2, 1e3), o.value.startTime = 0);
+      e && (P.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, 1, $()), o.value.duration = Math.min(a.spinDuration / 2, 1e3), o.value.startTime = 0);
     }, ae = () => {
-      P(), m.value = !1, y.value = !1, I.value = null, r.value = a.initialAngle, o.value = {
+      T(), m.value = !1, y.value = !1, P.value = null, r.value = a.initialAngle, o.value = {
         startAngle: a.initialAngle,
         endAngle: a.initialAngle,
         duration: a.spinDuration,
         startTime: 0
       }, O(), g(), A.value = p(r.value);
     };
-    return z(
+    return C(
       () => a.size,
       () => {
         j(g);
       }
-    ), z(
+    ), C(
       () => a.initialAngle,
       (t) => {
         m.value || (r.value = t, o.value.startAngle = t, o.value.endAngle = t, o.value.startTime = 0, g());
       }
-    ), z(
+    ), C(
       () => a.spinDuration,
       (t) => {
         o.value.duration = t;
       }
-    ), z(s, () => {
+    ), C(s, () => {
       j(() => {
         A.value = p(r.value), g();
       });
     }), re(() => {
       g(), A.value = p(r.value);
     }), se(() => {
-      P(), x.value && x.value.close();
+      T(), x.value && x.value.close();
     }), S({
       spin: te,
       stop: ne,
       reset: ae,
-      getCurrentItem: V
+      getCurrentItem: D
     }), (t, e) => (G(), E("div", {
       class: "casino-roulette",
       style: U({ width: c.size + "px", height: c.size + "px" })
@@ -236,8 +236,8 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
   for (const [h, a] of S)
     k[h] = a;
   return k;
-}, he = /* @__PURE__ */ me(ge, [["__scopeId", "data-v-1793a31e"]]);
+}, he = /* @__PURE__ */ me(ge, [["__scopeId", "data-v-de5de1ac"]]);
 export {
-  he as CasinoRoulette,
+  he as VueRoulette,
   he as default
 };

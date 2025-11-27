@@ -1,6 +1,6 @@
-import CasinoRoulette from './components/CasinoRoulette.vue'
+import VueRoulette from './components/VueRoulette.vue'
 
 export type { RouletteItem } from './types'
 
-export { CasinoRoulette }
-export default CasinoRoulette
+export { VueRoulette }
+export default VueRoulette
