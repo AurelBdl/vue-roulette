@@ -6,6 +6,8 @@ Reusable Vue 3 component that renders an animated casino wheel on `<canvas>`. Th
 
 A live demo is available at: [https://vue-roulette.ablondel.com/](https://vue-roulette.ablondel.com/)
 
+<img src="src/assets/demo-image.png" alt="Vue Roulette Demo" width="400" />
+
 ## Installation
 
 ```bash
