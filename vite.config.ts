@@ -12,21 +12,4 @@ export default defineConfig({
 		host: true,    // This enables listening on all network interfaces
 		port: 3000
 	},
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'CasinoRoulette',
-      fileName: format => (format === 'es' ? 'casino-roulette.js' : 'casino-roulette.umd.cjs'),
-      formats: ['es', 'umd']
-    },
-    rollupOptions: {
-      external: ['vue'],
-      output: {
-        exports: 'named',
-        globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
 })
