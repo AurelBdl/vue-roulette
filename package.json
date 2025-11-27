@@ -5,7 +5,8 @@
   "description": "Composant Vue 3 de roue de casino réutilisable",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && BUILD_MODE=lib vite build",
+    "build:demo": "vite build",
     "preview": "vite preview"
   },
   "main": "dist/casino-roulette.umd.cjs",
