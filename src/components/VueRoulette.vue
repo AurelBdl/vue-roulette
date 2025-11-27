@@ -209,12 +209,12 @@ const playTick = () => {
   const oscillator = ctx.createOscillator()
   const gain = ctx.createGain()
   oscillator.frequency.value = 1200
-  gain.gain.value = 0.0015
+  gain.gain.value = 0.15
   oscillator.connect(gain)
   gain.connect(ctx.destination)
   const now = ctx.currentTime
-  gain.gain.setValueAtTime(0.0015, now)
-  gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.02)
+  gain.gain.setValueAtTime(0.15, now)
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02)
   oscillator.start(now)
   oscillator.stop(now + 0.02)
 }

@@ -58,6 +58,8 @@ const spin = () => rouletteRef.value?.spin();
 | `initialVelocity` | `number`                | `2000`               | Degrees per second applied on launch to set the number of rotations. |
 | `initialAngle`    | `number`                | `0`                  | Starting angle.                                                      |
 | `enableTickSound` | `boolean`               | `false`              | Plays a click sound on every segment crossing.                       |
+| `pointerOptions`  | `PointerOptions`        | `{}`                 | Customization options for the pointer (see below).                   |
+| `pointerPosition` | `string`                | `'top'`              | Position of the pointer: `'top'`, `'right'`, `'bottom'`, or `'left'`.|
 
 ### `RouletteItem` interface
 
@@ -66,6 +68,17 @@ interface RouletteItem {
   label: string;
   value: unknown;
   color?: string;
+}
+```
+
+### `PointerOptions` interface
+
+```ts
+interface PointerOptions {
+  visible?: boolean; // Show or hide the pointer (default: true)
+  color?: string;    // Pointer color (default: '#ffffff')
+  width?: number;    // Pointer width in pixels (default: 26)
+  length?: number;   // Pointer length in pixels (default: 38)
 }
 ```
 
