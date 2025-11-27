@@ -63,6 +63,8 @@ const spin = () => rouletteRef.value?.spin();
 | `centerHoleRatio` | `number`                | `0.28`               | Size ratio of the center hole relative to the wheel radius (0-1).    |
 | `spinOnClick`     | `boolean`               | `false`              | Enables spinning the wheel by clicking on it.                        |
 | `tickSoundVolume` | `number`                | `0.15`               | Volume of the tick sound (0-1). Only applies when `enableTickSound` is `true`. |
+| `borderWidth`     | `number`                | `4`                  | Width of the wheel border in pixels.                                 |
+| `borderColor`     | `string`                | `'#ffffff'`          | Color of the wheel border.                                           |
 
 ### `RouletteItem` interface
 

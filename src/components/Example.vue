@@ -20,6 +20,8 @@
           :initialVelocity="config.initialVelocity"
           :pointerPosition="config.pointerPosition"
           :pointerOptions="pointerOptions"
+          :borderWidth="config.borderWidth"
+          :borderColor="config.borderColor"
           @select="onSelect"
           @spin-start="onSpinStart"
           @spin-end="onSpinEnd"
@@ -119,6 +121,20 @@
               max="0.5"
               step="0.05"
             />
+          </label>
+          <label>
+            <span>Border Width: {{ config.borderWidth }}px</span>
+            <input
+              v-model.number="config.borderWidth"
+              type="range"
+              min="0"
+              max="20"
+              step="1"
+            />
+          </label>
+          <label>
+            <span>Border Color</span>
+            <input v-model="config.borderColor" type="color" />
           </label>
           <label class="checkbox">
             <input v-model="config.useColor" type="checkbox" />
@@ -230,6 +246,8 @@ const config = ref({
   initialAngle: 0,
   initialVelocity: 2000,
   pointerPosition: "top" as "top" | "right" | "bottom" | "left",
+  borderWidth: 4,
+  borderColor: "#ffffff",
 });
 
 const pointerConfig = ref({
@@ -334,6 +352,12 @@ const generatedCode = computed(() => {
   }
   if (JSON.stringify(pointerOptions.value) !== JSON.stringify({ visible: true, color: '#ffffff', width: 26, length: 38 })) {
     code += `\n  :pointer-options="pointerOptions"`;
+  }
+  if (config.value.borderWidth !== 4) {
+    code += `\n  :border-width="${config.value.borderWidth}"`;
+  }
+  if (config.value.borderColor !== '#ffffff') {
+    code += `\n  border-color="${config.value.borderColor}"`;
   }
   
   code += `\n  @select="onSelect"`;

@@ -91,6 +91,14 @@ const props = defineProps({
   tickSoundVolume: {
     type: Number,
     default: 0.15
+  },
+  borderWidth: {
+    type: Number,
+    default: 4
+  },
+  borderColor: {
+    type: String,
+    default: '#ffffff'
   }
 })
 
@@ -303,11 +311,14 @@ const drawWheel = () => {
   context.translate(radius, radius)
 
   const count = normalizedItems.value.length
+  const borderWidth = props.borderWidth ?? 4
+  
   if (!count) {
+    const effectiveRadius = radius - borderWidth / 2
     context.beginPath()
-    context.arc(0, 0, radius - 8, 0, Math.PI * 2)
-    context.strokeStyle = '#d6d6d6'
-    context.lineWidth = 4
+    context.arc(0, 0, effectiveRadius, 0, Math.PI * 2)
+    context.strokeStyle = props.borderColor
+    context.lineWidth = borderWidth
     context.stroke()
     context.save()
     context.globalCompositeOperation = 'destination-out'
@@ -317,8 +328,8 @@ const drawWheel = () => {
     context.restore()
     context.beginPath()
     context.arc(0, 0, innerRadius, 0, Math.PI * 2)
-    context.strokeStyle = 'rgba(255, 255, 255, 0.35)'
-    context.lineWidth = Math.max(2, radius * 0.012)
+    context.strokeStyle = props.borderColor
+    context.lineWidth = borderWidth
     context.stroke()
     context.restore()
     return
@@ -327,6 +338,7 @@ const drawWheel = () => {
   const arc = (2 * Math.PI) / count
   const rotation = (angle.value * Math.PI) / 180
   const baseOffset = -Math.PI / 2 - arc / 2
+  const effectiveRadius = radius - borderWidth / 2
 
   normalizedItems.value.forEach((item, index) => {
     const start = rotation + index * arc + baseOffset
@@ -334,7 +346,7 @@ const drawWheel = () => {
     context.beginPath()
     context.moveTo(0, 0)
     context.fillStyle = item.color
-    context.arc(0, 0, radius - 4, start, end)
+    context.arc(0, 0, effectiveRadius, start, end)
     context.closePath()
     context.fill()
 
@@ -343,9 +355,18 @@ const drawWheel = () => {
     context.rotate((start + end) / 2)
     context.textAlign = 'right'
     context.font = `${Math.max(14, radius * 0.08)}px sans-serif`
-    context.fillText(item.label, radius - 24, 6)
+    context.fillText(item.label, effectiveRadius - 20, 6)
     context.restore()
   })
+
+  // Draw outer border
+  if (borderWidth > 0) {
+    context.beginPath()
+    context.arc(0, 0, effectiveRadius, 0, Math.PI * 2)
+    context.strokeStyle = props.borderColor
+    context.lineWidth = borderWidth
+    context.stroke()
+  }
 
   context.save()
   context.globalCompositeOperation = 'destination-out'
@@ -354,11 +375,14 @@ const drawWheel = () => {
   context.fill()
   context.restore()
 
-  context.beginPath()
-  context.arc(0, 0, innerRadius, 0, Math.PI * 2)
-  context.strokeStyle = 'rgba(255, 255, 255, 0.35)'
-  context.lineWidth = Math.max(2, radius * 0.012)
-  context.stroke()
+  // Draw inner border
+  if (borderWidth > 0) {
+    context.beginPath()
+    context.arc(0, 0, innerRadius, 0, Math.PI * 2)
+    context.strokeStyle = props.borderColor
+    context.lineWidth = borderWidth
+    context.stroke()
+  }
 
   context.restore()
 }
@@ -518,6 +542,20 @@ watch(
 )
 
 watch(
+  () => props.borderWidth,
+  () => {
+    nextTick(drawWheel)
+  }
+)
+
+watch(
+  () => props.borderColor,
+  () => {
+    nextTick(drawWheel)
+  }
+)
+
+watch(
   () => props.pointerPosition,
   () => {
     lastIndex.value = getIndexFromAngle(angle.value)
@@ -584,7 +622,6 @@ defineExpose({
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
   background-color: transparent;
 }
 
