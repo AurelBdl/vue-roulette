@@ -6,7 +6,7 @@ Reusable Vue 3 component that renders an animated casino wheel on `<canvas>`. Th
 
 A live demo is available at: [https://vue-roulette.ablondel.com/](https://vue-roulette.ablondel.com/)
 
-<img src="src/assets/demo-image.png" alt="Vue Roulette Demo" width="400" />
+<img src="src/assets/demo-image.png" alt="Vue Roulette Demo" width="100%" />
 
 ## Installation
 
@@ -21,7 +21,7 @@ Then import the component (or the `RouletteItem` type) from the package.
 ```vue
 <script setup lang="ts">
 import { ref } from "vue";
-import CasinoRoulette, { type RouletteItem } from "vue-roulette";
+import VueRoulette, { type RouletteItem } from "vue-roulette";
 
 const items = ref<RouletteItem[]>([
   { label: "10", value: 10 },
@@ -30,7 +30,7 @@ const items = ref<RouletteItem[]>([
 ]);
 
 const selection = ref<RouletteItem | null>(null);
-const rouletteRef = ref<InstanceType<typeof CasinoRoulette> | null>(null);
+const rouletteRef = ref<InstanceType<typeof VueRoulette> | null>(null);
 
 const onSelect = (item: RouletteItem) => {
   selection.value = item;
@@ -40,7 +40,7 @@ const spin = () => rouletteRef.value?.spin();
 </script>
 
 <template>
-  <CasinoRoulette ref="rouletteRef" :items="items" :useColor="false" @select="onSelect" />
+  <VueRoulette ref="rouletteRef" :items="items" :useColor="false" @select="onSelect" />
   <button @click="spin">Spin</button>
   <p v-if="selection">Winner: {{ selection.label }}</p>
 </template>
@@ -104,11 +104,11 @@ The root page loads `Example.vue`, which showcases props, events, and exposed me
 ## Build & publish
 
 ```bash
-npm run build
+npm run build:lib
 ```
 
-- `dist/casino-roulette.js`: ES module.
-- `dist/casino-roulette.umd.cjs`: UMD build.
+- `dist/vue-roulette.js`: ES module.
+- `dist/vue-roulette.umd.cjs`: UMD build.
 - `dist/index.d.ts`: TypeScript declarations.
 
 Then publish to npm (after logging in):
