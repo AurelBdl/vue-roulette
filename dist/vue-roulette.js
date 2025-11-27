@@ -1,5 +1,5 @@
-import { defineComponent as oe, ref as f, computed as M, watch as C, nextTick as j, onMounted as re, onBeforeUnmount as se, createElementBlock as E, openBlock as G, normalizeStyle as U, createElementVNode as H, createCommentVNode as ie, normalizeClass as ue } from "vue";
-const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve = "#2c3e50", de = 0.28, ge = /* @__PURE__ */ oe({
+import { defineComponent as fe, ref as p, computed as P, watch as m, nextTick as I, onMounted as de, onBeforeUnmount as ve, createElementBlock as G, openBlock as U, normalizeStyle as J, createElementVNode as K, createCommentVNode as pe, normalizeClass as L } from "vue";
+const ge = ["width", "height", "aria-label"], Q = "#27ae60", me = "#c0392b", he = "#2c3e50", be = /* @__PURE__ */ fe({
   __name: "VueRoulette",
   props: {
     items: {
@@ -16,7 +16,7 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
     },
     easingFunction: {
       type: Function,
-      default: (c) => 1 - Math.pow(1 - c, 4)
+      default: (f) => 1 - Math.pow(1 - f, 4)
     },
     useColor: {
       type: Boolean,
@@ -41,203 +41,264 @@ const ce = ["width", "height", "aria-label"], J = "#27ae60", fe = "#c0392b", ve 
     pointerPosition: {
       type: String,
       default: "top"
+    },
+    centerHoleRatio: {
+      type: Number,
+      default: 0.28
+    },
+    spinOnClick: {
+      type: Boolean,
+      default: !1
+    },
+    tickSoundVolume: {
+      type: Number,
+      default: 0.15
+    },
+    borderWidth: {
+      type: Number,
+      default: 4
+    },
+    borderColor: {
+      type: String,
+      default: "#ffffff"
     }
   },
   emits: ["spin-start", "spin-end", "select", "update:angle"],
-  setup(c, { expose: S, emit: k }) {
-    const h = ["#f39c12", "#8e44ad", "#16a085", "#d35400"], a = c, I = k, F = f(null), r = f(a.initialAngle), m = f(!1), b = f(null), o = f({
-      startAngle: a.initialAngle,
-      endAngle: a.initialAngle,
-      duration: a.spinDuration,
+  setup(f, { expose: O, emit: T }) {
+    const y = ["#f39c12", "#8e44ad", "#16a085", "#d35400"], n = f, S = T, W = p(null), s = p(n.initialAngle), b = p(!1), x = p(null), r = p({
+      startAngle: n.initialAngle,
+      endAngle: n.initialAngle,
+      duration: n.spinDuration,
       startTime: 0
-    }), P = f(null), A = f(null), x = f(null), y = f(!1), N = M(() => ({
+    }), z = p(null), A = p(null), C = p(null), k = p(!1), D = P(() => ({
       visible: !0,
       color: "#ffffff",
       width: 26,
       length: 38,
-      ...a.pointerOptions ?? {}
-    })), K = M(() => N.value.visible !== !1), L = M(() => {
-      const { width: t, length: e, color: l } = N.value, n = {
+      ...n.pointerOptions ?? {}
+    })), X = P(() => D.value.visible !== !1), Y = P(() => {
+      const { width: t, length: e, color: l } = D.value, a = {
         "--pointer-width": `${t}px`,
         "--pointer-length": `${e}px`,
         "--pointer-color": l ?? "#ffffff"
-      }, i = `${-(e / 2)}px`;
-      switch (a.pointerPosition) {
+      }, o = `${-(e / 2)}px`;
+      switch (n.pointerPosition) {
         case "bottom":
-          return { ...n, bottom: i, left: "50%", transform: "translate(-50%, 0)" };
+          return { ...a, bottom: o, left: "50%", transform: "translate(-50%, 0)" };
         case "left":
-          return { ...n, left: i, top: "50%", transform: "translate(0, -50%)" };
+          return { ...a, left: o, top: "50%", transform: "translate(0, -50%)" };
         case "right":
-          return { ...n, right: i, top: "50%", transform: "translate(0, -50%)" };
+          return { ...a, right: o, top: "50%", transform: "translate(0, -50%)" };
         case "top":
         default:
-          return { ...n, top: i, left: "50%", transform: "translate(-50%, 0)" };
+          return { ...a, top: o, left: "50%", transform: "translate(-50%, 0)" };
       }
-    }), s = M(() => {
-      const t = !a.useColor && a.items.length % 2 === 1;
-      return (t ? [{ label: "0", value: "0", color: J }, ...a.items] : [...a.items]).map((l, n) => {
-        if (a.useColor) {
-          const u = h.length ? n % h.length : 0, z = h[u] ?? "#ffffff", d = l.color ?? z;
-          return { label: l.label, value: l.value, color: d };
+    }), i = P(() => {
+      const t = !n.useColor && n.items.length % 2 === 1;
+      return (t ? [{ label: "0", value: "0", color: Q }, ...n.items] : [...n.items]).map((l, a) => {
+        if (n.useColor) {
+          const u = y.length ? a % y.length : 0, g = y[u] ?? "#ffffff", c = l.color ?? g;
+          return { label: l.label, value: l.value, color: c };
         }
-        if (t && n === 0)
-          return { label: l.label, value: l.value, color: J };
-        const v = (t ? n - 1 : n) % 2 === 0 ? fe : ve;
+        if (t && a === 0)
+          return { label: l.label, value: l.value, color: Q };
+        const v = (t ? a - 1 : a) % 2 === 0 ? me : he;
         return { label: l.label, value: l.value, color: v };
       });
-    }), V = M(() => s.value.length ? 360 / s.value.length : 0), w = (t) => {
+    }), B = P(() => i.value.length ? 360 / i.value.length : 0), R = (t) => {
       const e = t % 360;
       return e >= 0 ? e : e + 360;
-    }, p = (t) => {
-      if (!s.value.length)
+    }, Z = () => {
+      switch (n.pointerPosition) {
+        case "right":
+          return -90;
+        case "bottom":
+          return 180;
+        case "left":
+          return 90;
+        case "top":
+        default:
+          return 0;
+      }
+    }, h = (t) => {
+      if (!i.value.length)
         return null;
-      const e = w(t), l = V.value, n = l / 2, v = (360 - (e - n + 360) % 360) % 360;
-      let u = Math.floor(v / l);
-      return u >= s.value.length && (u = s.value.length - 1), u;
-    }, D = () => {
-      const t = p(r.value);
-      return t === null ? null : s.value[t] ?? null;
-    }, Q = () => {
-      if (!a.enableTickSound || typeof window > "u")
+      const e = Z(), l = t + e, a = R(l), o = B.value, v = o / 2, g = (360 - (a - v + 360) % 360) % 360;
+      let c = Math.floor(g / o);
+      return c >= i.value.length && (c = i.value.length - 1), c;
+    }, $ = () => {
+      const t = h(s.value);
+      return t === null ? null : i.value[t] ?? null;
+    }, ee = () => {
+      if (!n.enableTickSound || typeof window > "u")
         return;
-      x.value || (x.value = new AudioContext());
-      const t = x.value;
+      C.value || (C.value = new AudioContext());
+      const t = C.value;
       if (!t)
         return;
       t.state === "suspended" && t.resume();
-      const e = t.createOscillator(), l = t.createGain();
-      e.frequency.value = 1200, l.gain.value = 15e-4, e.connect(l), l.connect(t.destination);
-      const n = t.currentTime;
-      l.gain.setValueAtTime(15e-4, n), l.gain.exponentialRampToValueAtTime(1e-5, n + 0.02), e.start(n), e.stop(n + 0.02);
-    }, X = () => {
-      const t = p(r.value);
-      t !== null && A.value !== t && (A.value = t, Q());
-    }, O = () => {
-      I("update:angle", w(r.value));
-    }, g = () => {
-      const t = F.value;
+      const e = t.createOscillator(), l = t.createGain(), a = Math.max(0, Math.min(1, n.tickSoundVolume));
+      e.frequency.value = 1200, l.gain.value = a, e.connect(l), l.connect(t.destination);
+      const o = t.currentTime;
+      l.gain.setValueAtTime(a, o), l.gain.exponentialRampToValueAtTime(1e-4, o + 0.02), e.start(o), e.stop(o + 0.02);
+    }, te = () => {
+      const t = h(s.value);
+      t !== null && A.value !== t && (A.value = t, ee());
+    }, N = () => {
+      S("update:angle", R(s.value));
+    }, ne = (t) => {
+      let e = t.replace("#", "");
+      e.length === 3 && (e = e.split("").map((u) => u + u).join(""));
+      const l = parseInt(e.substring(0, 2), 16), a = parseInt(e.substring(2, 4), 16), o = parseInt(e.substring(4, 6), 16);
+      return (0.299 * l + 0.587 * a + 0.114 * o) / 255 > 0.5 ? "#000000" : "#ffffff";
+    }, d = () => {
+      const t = W.value;
       if (!t)
         return;
       const e = t.getContext("2d");
       if (!e)
         return;
-      const l = a.size, n = l / 2, i = n * de;
-      e.clearRect(0, 0, l, l), e.save(), e.translate(n, n);
-      const v = s.value.length;
+      const l = n.size, a = l / 2, o = a * n.centerHoleRatio;
+      e.clearRect(0, 0, l, l), e.save(), e.translate(a, a);
+      const v = i.value.length, u = n.borderWidth ?? 4;
       if (!v) {
-        e.beginPath(), e.arc(0, 0, n - 8, 0, Math.PI * 2), e.strokeStyle = "#d6d6d6", e.lineWidth = 4, e.stroke(), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.fill(), e.restore(), e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.strokeStyle = "rgba(255, 255, 255, 0.35)", e.lineWidth = Math.max(2, n * 0.012), e.stroke(), e.restore();
+        const M = a - u / 2;
+        e.beginPath(), e.arc(0, 0, M, 0, Math.PI * 2), e.strokeStyle = n.borderColor, e.lineWidth = u, e.stroke(), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, o, 0, Math.PI * 2), e.fill(), e.restore(), e.beginPath(), e.arc(0, 0, o, 0, Math.PI * 2), e.strokeStyle = n.borderColor, e.lineWidth = u, e.stroke(), e.restore();
         return;
       }
-      const u = 2 * Math.PI / v, z = r.value * Math.PI / 180, d = -Math.PI / 2 - u / 2;
-      s.value.forEach((_, le) => {
-        const R = z + le * u + d, W = R + u;
-        e.beginPath(), e.moveTo(0, 0), e.fillStyle = _.color, e.arc(0, 0, n - 4, R, W), e.closePath(), e.fill(), e.save(), e.fillStyle = "#ffffff", e.rotate((R + W) / 2), e.textAlign = "right", e.font = `${Math.max(14, n * 0.08)}px sans-serif`, e.fillText(_.label, n - 24, 6), e.restore();
-      }), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.fill(), e.restore(), e.beginPath(), e.arc(0, 0, i, 0, Math.PI * 2), e.strokeStyle = "rgba(255, 255, 255, 0.35)", e.lineWidth = Math.max(2, n * 0.012), e.stroke(), e.restore();
-    }, T = () => {
-      b.value !== null && (cancelAnimationFrame(b.value), b.value = null);
-    }, Y = () => {
-      T(), b.value = requestAnimationFrame(B);
-    }, B = (t) => {
-      o.value.startTime || (o.value.startTime = t);
-      const e = t - o.value.startTime, l = o.value.duration || 1, n = Math.min(e / l, 1), i = a.easingFunction(n);
-      r.value = o.value.startAngle + (o.value.endAngle - o.value.startAngle) * i, O(), X(), g(), n < 1 ? b.value = requestAnimationFrame(B) : Z();
-    }, Z = () => {
-      T(), m.value = !1, y.value = !1, O(), g(), I("spin-end");
-      const t = D();
-      P.value = t, t && I("select", t);
-    }, ee = () => {
-      const t = Math.floor(a.initialVelocity * a.spinDuration / 36e4);
+      const g = 2 * Math.PI / v, c = s.value * Math.PI / 180, ue = -Math.PI / 2 - g / 2, V = a - u / 2;
+      i.value.forEach((M, ce) => {
+        const F = c + ce * g + ue, _ = F + g;
+        e.beginPath(), e.moveTo(0, 0), e.fillStyle = M.color, e.arc(0, 0, V, F, _), e.closePath(), e.fill(), e.save(), e.fillStyle = ne(M.color), e.rotate((F + _) / 2), e.textAlign = "right", e.font = `${Math.max(14, a * 0.08)}px sans-serif`, e.fillText(M.label, V - 20, 6), e.restore();
+      }), u > 0 && (e.beginPath(), e.arc(0, 0, V, 0, Math.PI * 2), e.strokeStyle = n.borderColor, e.lineWidth = u, e.stroke()), e.save(), e.globalCompositeOperation = "destination-out", e.beginPath(), e.arc(0, 0, o, 0, Math.PI * 2), e.fill(), e.restore(), u > 0 && (e.beginPath(), e.arc(0, 0, o, 0, Math.PI * 2), e.strokeStyle = n.borderColor, e.lineWidth = u, e.stroke()), e.restore();
+    }, w = () => {
+      x.value !== null && (cancelAnimationFrame(x.value), x.value = null);
+    }, ae = () => {
+      w(), x.value = requestAnimationFrame(j);
+    }, j = (t) => {
+      r.value.startTime || (r.value.startTime = t);
+      const e = t - r.value.startTime, l = r.value.duration || 1, a = Math.min(e / l, 1), o = n.easingFunction(a);
+      s.value = r.value.startAngle + (r.value.endAngle - r.value.startAngle) * o, N(), te(), d(), a < 1 ? x.value = requestAnimationFrame(j) : le();
+    }, le = () => {
+      w(), b.value = !1, k.value = !1, N(), d(), S("spin-end");
+      const t = $();
+      z.value = t, t && S("select", t);
+    }, oe = () => {
+      const t = Math.floor(n.initialVelocity * n.spinDuration / 36e4);
       return Math.max(3, t) + Math.floor(Math.random() * 3);
-    }, $ = () => {
-      if (s.value.length <= 1)
+    }, q = () => {
+      if (i.value.length <= 1)
         return 0.5;
       const t = 0.04;
       return t + Math.random() * (1 - t * 2);
-    }, q = (t, e, l = 0.5) => {
-      if (!s.value.length)
-        return r.value;
-      const n = V.value, i = w(r.value), v = Math.min(Math.max(l, 0.01), 0.99), u = n / 2;
-      let d = (360 - (t + v) * n + u) % 360 - i;
-      return d <= 0 && (d += 360), d += e * 360, r.value + d;
-    }, te = () => {
-      if (!s.value.length || m.value)
+    }, E = (t, e, l = 0.5) => {
+      if (!i.value.length)
+        return s.value;
+      const a = B.value, o = R(s.value), v = Math.min(Math.max(l, 0.01), 0.99), u = a / 2;
+      let c = (360 - (t + v) * a + u) % 360 - o;
+      return c <= 0 && (c += 360), c += e * 360, s.value + c;
+    }, H = () => {
+      if (!i.value.length || b.value)
         return;
-      y.value = !1;
-      const t = Math.floor(Math.random() * s.value.length), e = s.value[t];
-      e && (P.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, ee(), $()), o.value.duration = a.spinDuration, o.value.startTime = 0, m.value = !0, I("spin-start"), Y());
-    }, ne = () => {
-      if (!m.value || y.value)
+      k.value = !1;
+      const t = Math.floor(Math.random() * i.value.length), e = i.value[t];
+      e && (z.value = e, r.value.startAngle = s.value, r.value.endAngle = E(t, oe(), q()), r.value.duration = n.spinDuration, r.value.startTime = 0, b.value = !0, S("spin-start"), ae());
+    }, re = () => {
+      if (!b.value || k.value)
         return;
-      y.value = !0;
-      const t = p(r.value);
+      k.value = !0;
+      const t = h(s.value);
       if (t === null)
         return;
-      const e = s.value[t];
-      e && (P.value = e, o.value.startAngle = r.value, o.value.endAngle = q(t, 1, $()), o.value.duration = Math.min(a.spinDuration / 2, 1e3), o.value.startTime = 0);
-    }, ae = () => {
-      T(), m.value = !1, y.value = !1, P.value = null, r.value = a.initialAngle, o.value = {
-        startAngle: a.initialAngle,
-        endAngle: a.initialAngle,
-        duration: a.spinDuration,
+      const e = i.value[t];
+      e && (z.value = e, r.value.startAngle = s.value, r.value.endAngle = E(t, 1, q()), r.value.duration = Math.min(n.spinDuration / 2, 1e3), r.value.startTime = 0);
+    }, se = () => {
+      w(), b.value = !1, k.value = !1, z.value = null, s.value = n.initialAngle, r.value = {
+        startAngle: n.initialAngle,
+        endAngle: n.initialAngle,
+        duration: n.spinDuration,
         startTime: 0
-      }, O(), g(), A.value = p(r.value);
+      }, N(), d(), A.value = h(s.value);
+    }, ie = () => {
+      n.spinOnClick && H();
     };
-    return C(
-      () => a.size,
+    return m(
+      () => n.size,
       () => {
-        j(g);
+        I(d);
       }
-    ), C(
-      () => a.initialAngle,
+    ), m(
+      () => n.centerHoleRatio,
+      () => {
+        I(d);
+      }
+    ), m(
+      () => n.borderWidth,
+      () => {
+        I(d);
+      }
+    ), m(
+      () => n.borderColor,
+      () => {
+        I(d);
+      }
+    ), m(
+      () => n.pointerPosition,
+      () => {
+        A.value = h(s.value);
+      }
+    ), m(
+      () => n.initialAngle,
       (t) => {
-        m.value || (r.value = t, o.value.startAngle = t, o.value.endAngle = t, o.value.startTime = 0, g());
+        b.value || (s.value = t, r.value.startAngle = t, r.value.endAngle = t, r.value.startTime = 0, d());
       }
-    ), C(
-      () => a.spinDuration,
+    ), m(
+      () => n.spinDuration,
       (t) => {
-        o.value.duration = t;
+        r.value.duration = t;
       }
-    ), C(s, () => {
-      j(() => {
-        A.value = p(r.value), g();
+    ), m(i, () => {
+      I(() => {
+        A.value = h(s.value), d();
       });
-    }), re(() => {
-      g(), A.value = p(r.value);
-    }), se(() => {
-      T(), x.value && x.value.close();
-    }), S({
-      spin: te,
-      stop: ne,
-      reset: ae,
-      getCurrentItem: D
-    }), (t, e) => (G(), E("div", {
+    }), de(() => {
+      d(), A.value = h(s.value);
+    }), ve(() => {
+      w(), C.value && C.value.close();
+    }), O({
+      spin: H,
+      stop: re,
+      reset: se,
+      getCurrentItem: $
+    }), (t, e) => (U(), G("div", {
       class: "casino-roulette",
-      style: U({ width: c.size + "px", height: c.size + "px" })
+      style: J({ width: f.size + "px", height: f.size + "px" })
     }, [
-      H("canvas", {
+      K("canvas", {
         ref_key: "canvasRef",
-        ref: F,
-        class: "roulette-canvas",
-        width: c.size,
-        height: c.size,
-        "aria-label": `Roulette avec ${s.value.length} sections`
-      }, null, 8, ce),
-      K.value ? (G(), E("div", {
+        ref: W,
+        class: L(["roulette-canvas", { clickable: f.spinOnClick }]),
+        width: f.size,
+        height: f.size,
+        "aria-label": `Roulette avec ${i.value.length} sections`,
+        onClick: ie
+      }, null, 10, ge),
+      X.value ? (U(), G("div", {
         key: 0,
-        class: ue(["roulette-pointer", `pointer-${a.pointerPosition}`]),
-        style: U(L.value)
+        class: L(["roulette-pointer", `pointer-${n.pointerPosition}`]),
+        style: J(Y.value)
       }, [...e[0] || (e[0] = [
-        H("div", { class: "pointer-shape" }, null, -1)
-      ])], 6)) : ie("", !0)
+        K("div", { class: "pointer-shape" }, null, -1)
+      ])], 6)) : pe("", !0)
     ], 4));
   }
-}), me = (c, S) => {
-  const k = c.__vccOpts || c;
-  for (const [h, a] of S)
-    k[h] = a;
-  return k;
-}, he = /* @__PURE__ */ me(ge, [["__scopeId", "data-v-de5de1ac"]]);
+}), Ae = (f, O) => {
+  const T = f.__vccOpts || f;
+  for (const [y, n] of O)
+    T[y] = n;
+  return T;
+}, xe = /* @__PURE__ */ Ae(be, [["__scopeId", "data-v-8ca3b7dc"]]);
 export {
-  he as VueRoulette,
-  he as default
+  xe as VueRoulette,
+  xe as default
 };

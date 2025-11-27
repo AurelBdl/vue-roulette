@@ -20,6 +20,7 @@
       "import": "./dist/vue-roulette.js",
       "require": "./dist/vue-roulette.umd.cjs"
     },
+    "./style.css": "./dist/vue-roulette.css",
     "./VueRoulette.vue": "./src/components/VueRoulette.vue"
   },
   "files": [
@@ -35,7 +36,14 @@
   ],
   "author": "AurelBdl",
   "license": "MIT",
-  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AurelBdl/vue-roulette.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AurelBdl/vue-roulette/issues"
+  },
+  "homepage": "https://vue-roulette.ablondel.com",
   "peerDependencies": {
     "vue": "^3.4.0"
   },
@@ -43,9 +51,10 @@
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
-    "vue": "^3.5.24",
     "typescript": "~5.9.3",
     "vite": "^7.2.4",
+    "vite-plugin-dts": "^4.5.4",
+    "vue": "^3.5.24",
     "vue-tsc": "^3.1.4"
   }
 }
