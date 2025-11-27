@@ -1,6 +1,6 @@
 # Vue Roulette
 
-Reusable Vue 3 component that renders an animated casino wheel on `<canvas>`. The package is meant to be a small publishable library (`npm install vue-roulette`) and ships with a local demo (`npm run dev`).
+Reusable Vue 3 component that renders an animated casino wheel on `<canvas>`.
 
 ## Demo
 
