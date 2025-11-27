@@ -2,6 +2,10 @@
 
 Reusable Vue 3 component that renders an animated casino wheel on `<canvas>`. The package is meant to be a small publishable library (`npm install vue-roulette`) and ships with a local demo (`npm run dev`).
 
+## Demo
+
+A live demo is available at: [https://vue-roulette.ablondel.com/](https://vue-roulette.ablondel.com/)
+
 ## Installation
 
 ```bash
@@ -14,32 +18,27 @@ Then import the component (or the `RouletteItem` type) from the package.
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import CasinoRoulette, { type RouletteItem } from 'vue-roulette'
+import { ref } from "vue";
+import CasinoRoulette, { type RouletteItem } from "vue-roulette";
 
 const items = ref<RouletteItem[]>([
-  { label: '10', value: 10 },
-  { label: '25', value: 25 },
-  { label: '50', value: 50 }
-])
+  { label: "10", value: 10 },
+  { label: "25", value: 25 },
+  { label: "50", value: 50 },
+]);
 
-const selection = ref<RouletteItem | null>(null)
-const rouletteRef = ref<InstanceType<typeof CasinoRoulette> | null>(null)
+const selection = ref<RouletteItem | null>(null);
+const rouletteRef = ref<InstanceType<typeof CasinoRoulette> | null>(null);
 
 const onSelect = (item: RouletteItem) => {
-  selection.value = item
-}
+  selection.value = item;
+};
 
-const spin = () => rouletteRef.value?.spin()
+const spin = () => rouletteRef.value?.spin();
 </script>
 
 <template>
-  <CasinoRoulette
-    ref="rouletteRef"
-    :items="items"
-    :useColor="false"
-    @select="onSelect"
-  />
+  <CasinoRoulette ref="rouletteRef" :items="items" :useColor="false" @select="onSelect" />
   <button @click="spin">Spin</button>
   <p v-if="selection">Winner: {{ selection.label }}</p>
 </template>
@@ -47,35 +46,35 @@ const spin = () => rouletteRef.value?.spin()
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `items` | `RouletteItem[]` | required | Segments to draw. |
-| `size` | `number` | `400` | Canvas width/height. |
-| `spinDuration` | `number` | `4000` | Total animation duration (ms). |
-| `easingFunction` | `(t: number) => number` | `t => 1 - (1 - t)^4` | Acceleration/deceleration curve. |
-| `useColor` | `boolean` | `false` | Uses each item's color when `true`. |
-| `initialVelocity` | `number` | `2000` | Degrees per second applied on launch to set the number of rotations. |
-| `initialAngle` | `number` | `0` | Starting angle. |
-| `enableTickSound` | `boolean` | `false` | Plays a click sound on every segment crossing. |
+| Prop              | Type                    | Default              | Description                                                          |
+| ----------------- | ----------------------- | -------------------- | -------------------------------------------------------------------- |
+| `items`           | `RouletteItem[]`        | required             | Segments to draw.                                                    |
+| `size`            | `number`                | `400`                | Canvas width/height.                                                 |
+| `spinDuration`    | `number`                | `4000`               | Total animation duration (ms).                                       |
+| `easingFunction`  | `(t: number) => number` | `t => 1 - (1 - t)^4` | Acceleration/deceleration curve.                                     |
+| `useColor`        | `boolean`               | `false`              | Uses each item's color when `true`.                                  |
+| `initialVelocity` | `number`                | `2000`               | Degrees per second applied on launch to set the number of rotations. |
+| `initialAngle`    | `number`                | `0`                  | Starting angle.                                                      |
+| `enableTickSound` | `boolean`               | `false`              | Plays a click sound on every segment crossing.                       |
 
 ### `RouletteItem` interface
 
 ```ts
 interface RouletteItem {
-  label: string
-  value: unknown
-  color?: string
+  label: string;
+  value: unknown;
+  color?: string;
 }
 ```
 
 ## Emitted events
 
-| Event | Payload | When |
-| --- | --- | --- |
-| `spin-start` | `void` | A spin begins. |
-| `spin-end` | `void` | Animation ends (wheel stops). |
-| `select` | `RouletteItem` | Item located at the pointer after stopping. |
-| `update:angle` | `number` | Current angle (0-360) emitted on each frame. |
+| Event          | Payload        | When                                         |
+| -------------- | -------------- | -------------------------------------------- |
+| `spin-start`   | `void`         | A spin begins.                               |
+| `spin-end`     | `void`         | Animation ends (wheel stops).                |
+| `select`       | `RouletteItem` | Item located at the pointer after stopping.  |
+| `update:angle` | `number`       | Current angle (0-360) emitted on each frame. |
 
 ## Exposed methods
 
