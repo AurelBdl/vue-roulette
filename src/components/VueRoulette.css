@@ -33,19 +33,20 @@
   background: var(--pointer-color);
 }
 
-.casino-roulette .pointer-top .pointer-shape {
+.casino-roulette .roulette-pointer.pointer-top .pointer-shape {
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
-.casino-roulette .pointer-bottom .pointer-shape {
+.casino-roulette .roulette-pointer.pointer-bottom .pointer-shape {
   clip-path: polygon(50% 0, 0 100%, 100% 100%);
 }
 
-.casino-roulette .pointer-left .pointer-shape {
+.casino-roulette .roulette-pointer.pointer-left .pointer-shape {
   clip-path: polygon(100% 50%, 0 0, 0 100%);
 }
 
-.casino-roulette .pointer-right .pointer-shape {
+.casino-roulette .roulette-pointer.pointer-right .pointer-shape {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
+
 

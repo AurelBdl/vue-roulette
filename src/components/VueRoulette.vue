@@ -24,7 +24,6 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { RouletteItem } from '../types'
-import './VueRoulette.css'
 
 type NormalizedItem = Omit<RouletteItem, 'color'> & { color: string }
 
