@@ -610,7 +610,7 @@ defineExpose({
 })
 </script>
 
-<style scoped>
+<style>
 .casino-roulette {
   position: relative;
   display: inline-flex;
@@ -618,18 +618,18 @@ defineExpose({
   justify-content: center;
 }
 
-.roulette-canvas {
+.casino-roulette .roulette-canvas {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   background-color: transparent;
 }
 
-.roulette-canvas.clickable {
+.casino-roulette .roulette-canvas.clickable {
   cursor: pointer;
 }
 
-.roulette-pointer {
+.casino-roulette .roulette-pointer {
   position: absolute;
   width: var(--pointer-width);
   height: var(--pointer-length);
@@ -640,25 +640,25 @@ defineExpose({
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
 }
 
-.pointer-shape {
+.casino-roulette .pointer-shape {
   width: var(--pointer-width);
   height: var(--pointer-length);
   background: var(--pointer-color);
 }
 
-.pointer-top .pointer-shape {
+.casino-roulette .pointer-top .pointer-shape {
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
-.pointer-bottom .pointer-shape {
+.casino-roulette .pointer-bottom .pointer-shape {
   clip-path: polygon(50% 0, 0 100%, 100% 100%);
 }
 
-.pointer-left .pointer-shape {
+.casino-roulette .pointer-left .pointer-shape {
   clip-path: polygon(100% 50%, 0 0, 0 100%);
 }
 
-.pointer-right .pointer-shape {
+.casino-roulette .pointer-right .pointer-shape {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 </style>
