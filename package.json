@@ -1,6 +1,6 @@
 {
   "name": "vue-roulette",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "description": "Vue 3 roulette component",
   "private": false,
