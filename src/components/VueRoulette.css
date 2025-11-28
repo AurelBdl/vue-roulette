@@ -1,0 +1,51 @@
+.casino-roulette {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.casino-roulette .roulette-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.casino-roulette .roulette-canvas.clickable {
+  cursor: pointer;
+}
+
+.casino-roulette .roulette-pointer {
+  position: absolute;
+  width: var(--pointer-width);
+  height: var(--pointer-length);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+
+.casino-roulette .pointer-shape {
+  width: var(--pointer-width);
+  height: var(--pointer-length);
+  background: var(--pointer-color);
+}
+
+.casino-roulette .pointer-top .pointer-shape {
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+.casino-roulette .pointer-bottom .pointer-shape {
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
+
+.casino-roulette .pointer-left .pointer-shape {
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+.casino-roulette .pointer-right .pointer-shape {
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+

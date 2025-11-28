@@ -11,6 +11,7 @@
     "build": "npm run build:lib && npm run build:demo",
     "preview": "vite preview --config vite.demo.config.ts",
     "prepublishOnly": "npm run build:lib",
+    "postpublish": "git push origin main --tags",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
